@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Unbeatable XO Game</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div id="login-screen" class="login-screen">
+        <div class="login-box">
+            <h2>Enter Your Name</h2>
+            <input type="text" id="player-name" placeholder="Your name">
+            <button id="start-game">Start Game</button>
+        </div>
+    </div>
+    <div class="leaderboard">
+        <h3>Player Stats</h3>
+        <div id="player-stats">
+            <p>Games: <span id="total-games">0</span></p>
+            <p>Wins: <span id="wins">0</span></p>
+            <p>Draws: <span id="draws">0</span></p>
+            <p>Losses: <span id="losses">0</span></p>
+        </div>
+    </div>
+    <div class="container" style="display: none;">
+        <h1>Tic Tac Toe vs AI</h1>
+        <div class="status">Your turn! (X)</div>
+        <div class="board">
+            <div class="cell" data-index="0"></div>
+            <div class="cell" data-index="1"></div>
+            <div class="cell" data-index="2"></div>
+            <div class="cell" data-index="3"></div>
+            <div class="cell" data-index="4"></div>
+            <div class="cell" data-index="5"></div>
+            <div class="cell" data-index="6"></div>
+            <div class="cell" data-index="7"></div>
+            <div class="cell" data-index="8"></div>
+        </div>
+        <button class="reset-btn">Reset Game</button>
+    </div>
+    <script src="script.js"></script>
+</body>
+</html>
