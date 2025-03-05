@@ -136,6 +136,23 @@ function endGame(message) {
     savePlayerStats();
 }
 
+// Function to set AI difficulty based on device orientation
+function setAIDifficulty() {
+    if (window.matchMedia("(orientation: portrait)").matches) {
+        // Portrait mode (แนวตั้ง)
+        aiDifficulty = 'hard';
+    } else if (window.matchMedia("(orientation: landscape)").matches) {
+        // Landscape mode (แนวนอน)
+        aiDifficulty = 'easy';
+    }
+}
+
+// Event listener for device orientation change
+window.addEventListener('orientationchange', setAIDifficulty);
+
+// Initial call to set AI difficulty based on current orientation
+setAIDifficulty();
+
 function resetGame() {
     gameBoard = Array(9).fill('');
     gameActive = true;
@@ -147,6 +164,7 @@ function resetGame() {
         cell.classList.remove(PLAYER_X, PLAYER_O, 'pop');
         cell.addEventListener('click', handleClick, { once: true });
     });
+    setAIDifficulty(); // Reset AI difficulty based on current orientation
 }
 
 function getBestMove(board) {
