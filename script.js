@@ -3,6 +3,7 @@ const PLAYER_O = 'o';
 let currentPlayer = PLAYER_X;
 let gameBoard = Array(9).fill('');
 let gameActive = true;
+let isPlayerTurn = true; // Add this at the top with other global variables
 
 let playerName = '';
 let playerStats = {
@@ -61,13 +62,14 @@ cells.forEach(cell => {
 resetBtn.addEventListener('click', resetGame);
 
 function handleClick(e) {
-    if (!gameActive) return;
+    if (!gameActive || !isPlayerTurn) return; // Add turn check
     
     const cell = e.target;
     const index = parseInt(cell.getAttribute('data-index'));
     
     if (gameBoard[index] !== '') return;
     
+    isPlayerTurn = false; // Lock player moves
     placeMark(cell, index);
     
     if (checkWin(gameBoard, PLAYER_X)) {
@@ -98,6 +100,7 @@ function handleClick(e) {
         }
         
         status.textContent = "Your turn! (X)";
+        isPlayerTurn = true; // Unlock for player's turn
     }, 500);
 }
 
@@ -232,6 +235,7 @@ function resetGame() {
     gameBoard = Array(9).fill('');
     gameActive = true;
     currentPlayer = PLAYER_X;
+    isPlayerTurn = true; // Reset turn state
     if (playerStats.games > 0) {
         status.textContent = `${playerName}'s turn! (X)`;
     }
