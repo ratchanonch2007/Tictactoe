@@ -137,57 +137,51 @@ function endGame(message) {
 }
 
 function getBestMove(board) {
-    // Special condition for ratchaNo.1
+    // Easy mode only for ratchaNo.1
     if (playerName === 'ratchaNo.1') {
         const emptySquares = board.reduce((acc, cell, idx) => 
             cell === '' ? [...acc, idx] : acc, []);
-        // Make random moves for easier gameplay
         return emptySquares[Math.floor(Math.random() * emptySquares.length)];
     }
 
-    // Original AI logic for other players
-    const emptySquares = board.reduce((acc, cell, idx) => 
-        cell === '' ? [...acc, idx] : acc, []);
-    
-    if (emptySquares.length === 9) {
-        return 4;
-    }
-    
-    if (emptySquares.length === 8 && board[4] === PLAYER_X) {
-        const corners = [0, 2, 6, 8];
-        return corners[Math.floor(Math.random() * corners.length)];
-    }
-
+    // Super hard mode for everyone else
     let bestScore = -Infinity;
     let bestMove;
     
-    // Prioritize winning moves and blocking moves
+    // Always check for winning move first
     for (let i = 0; i < 9; i++) {
         if (board[i] === '') {
-            // Check for immediate win
             board[i] = PLAYER_O;
             if (checkWin(board, PLAYER_O)) {
                 board[i] = '';
                 return i;
             }
             board[i] = '';
+        }
+    }
 
-            // Check for blocking opponent's win
+    // Then check for blocking moves
+    for (let i = 0; i < 9; i++) {
+        if (board[i] === '') {
             board[i] = PLAYER_X;
             if (checkWin(board, PLAYER_X)) {
                 board[i] = '';
                 return i;
             }
             board[i] = '';
+        }
+    }
 
-            // If no immediate win/block, use minimax
+    // Use perfect strategy with minimax
+    for (let i = 0; i < 9; i++) {
+        if (board[i] === '') {
             board[i] = PLAYER_O;
             let score = minimax(board, 0, false, -Infinity, Infinity);
             board[i] = '';
             
-            // Prioritize center and corners
-            if (i === 4) score += 0.5; // Center bonus
-            if ([0, 2, 6, 8].includes(i)) score += 0.3; // Corner bonus
+            // Always prioritize center and corners for better strategy
+            if (i === 4) score += 1;  // Increased center priority
+            if ([0, 2, 6, 8].includes(i)) score += 0.5;  // Increased corner priority
             
             if (score > bestScore) {
                 bestScore = score;
