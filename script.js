@@ -136,49 +136,24 @@ function endGame(message) {
     savePlayerStats();
 }
 
-// Function to set AI difficulty based on device orientation
-function setAIDifficulty() {
-    if (window.matchMedia("(orientation: portrait)").matches) {
-        // Portrait mode (แนวตั้ง)
-        aiDifficulty = 'hard';
-    } else if (window.matchMedia("(orientation: landscape)").matches) {
-        // Landscape mode (แนวนอน)
-        aiDifficulty = 'easy';
-    }
-}
-
-// Event listener for device orientation change
-window.addEventListener('orientationchange', setAIDifficulty);
-
-// Initial call to set AI difficulty based on current orientation
-setAIDifficulty();
-
-function resetGame() {
-    gameBoard = Array(9).fill('');
-    gameActive = true;
-    currentPlayer = PLAYER_X;
-    if (playerStats.games > 0) {
-        status.textContent = `${playerName}'s turn! (X)`;
-    }
-    cells.forEach(cell => {
-        cell.classList.remove(PLAYER_X, PLAYER_O, 'pop');
-        cell.addEventListener('click', handleClick, { once: true });
-    });
-    setAIDifficulty(); // Reset AI difficulty based on current orientation
-}
-
 function getBestMove(board) {
-    // Strategic first move - always take center or corner
+    // Special condition for ratchaNo.1
+    if (playerName === 'ratchaNo.1') {
+        const emptySquares = board.reduce((acc, cell, idx) => 
+            cell === '' ? [...acc, idx] : acc, []);
+        // Make random moves for easier gameplay
+        return emptySquares[Math.floor(Math.random() * emptySquares.length)];
+    }
+
+    // Original AI logic for other players
     const emptySquares = board.reduce((acc, cell, idx) => 
         cell === '' ? [...acc, idx] : acc, []);
     
     if (emptySquares.length === 9) {
-        // First move - take center or corner
-        return 4; // Center position
+        return 4;
     }
     
     if (emptySquares.length === 8 && board[4] === PLAYER_X) {
-        // If player took center, take corner
         const corners = [0, 2, 6, 8];
         return corners[Math.floor(Math.random() * corners.length)];
     }
@@ -257,4 +232,17 @@ function minimax(board, depth, isMaximizing, alpha, beta) {
         }
         return bestScore;
     }
+}
+
+function resetGame() {
+    gameBoard = Array(9).fill('');
+    gameActive = true;
+    currentPlayer = PLAYER_X;
+    if (playerStats.games > 0) {
+        status.textContent = `${playerName}'s turn! (X)`;
+    }
+    cells.forEach(cell => {
+        cell.classList.remove(PLAYER_X, PLAYER_O, 'pop');
+        cell.addEventListener('click', handleClick, { once: true });
+    });
 }
